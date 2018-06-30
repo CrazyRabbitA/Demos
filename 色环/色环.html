@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <title>色环</title>
+    <style>
+        .colorWraper {
+            margin-left: 300px;
+        }
+
+        .colorWraper div {
+            display: flex;
+            align-items: center;
+            /*垂直居中*/
+            justify-content: center;
+            /*水平居中*/
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 100%;
+        }
+
+        .red {
+            width: 700px;
+            height: 700px;
+        }
+
+        .orange {
+            width: 600px;
+            height: 600px;
+        }
+
+        .yellow {
+            width: 500px;
+            height: 500px;
+        }
+
+        .green {
+            width: 400px;
+            height: 400px;
+        }
+
+        .lightgreen {
+            width: 300px;
+            height: 300px;
+        }
+
+        .blue {
+            width: 200px;
+            height: 200px;
+        }
+
+        .purple {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="colorWraper">
+        <div class="red">
+            <div class="orange">
+                <div class="yellow">
+                    <div class="green">
+                        <div class="lightgreen">
+                            <div class="blue">
+                                <div class="purple">Click</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</body>
+<script>
+    var colorWraper = document.querySelector('.colorWraper')
+    var divs = document.querySelectorAll('.colorWraper div')
+
+    for (var i = 0; i < divs.length; i++) {//给每个色圆添加click事件
+        divs[i].addEventListener('click', function (x) {
+            var tt = x.currentTarget//获取绑定click事件的元素节点，为了在延时函数中使用（闭包）
+            var y = $(divs).index(this)//获取索引值，不能直接用i
+            setTimeout(function () {
+                var color = tt.classList[0]//获取第一个类名，作为背景色
+                tt.style.backgroundColor = color//已经是字符串了，不要再加引号了
+            }, 500 * (divs.length - 1 - y))//最内层的先显示
+        }, false)//改成true效果也是一样的，这个demo只是模拟了冒泡阶段，点击最内层紫色环后，事件流一层层向上传递，并没有直接点击其他层，但是同样触发了它们的click事件，证明了事件流的存在
+
+    }
+</script>
+
+</html>
