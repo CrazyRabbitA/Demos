@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #cloud {
+            position: relative;
+            left: 200px;
+            top: 50px;
+        }
+
+        #cloud ul {
+            float: left;
+            list-style: none;
+            border: solid 1px black;
+            border-radius: 10px;
+        }
+
+        #cloud ul li {
+            float: left;
+            padding: 10px 20px;
+            width: 70px;
+            text-align: center;
+        }
+
+        #cloud ul li a {
+            text-decoration: none;
+            color: grey;
+        }
+
+        #cloud img {
+            position: absolute;
+            width: 90px;
+            height: 40px;
+            z-index: -1;
+            /*为了让图片衬与文字下方*/
+            left: 1px;
+            /*为了让云图的左边与第一个li元素的左边对齐,以为ul有1px的border*/
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cloud">
+        <img id="cloud_img" src="image/cloud.gif" alt="筋斗云">
+        <ul>
+            <li>
+                <a href="#">首页新闻</a>
+            </li>
+            <li>
+                <a href="#">师资力量</a>
+            </li>
+            <li>
+                <a href="#">活动策划</a>
+            </li>
+            <li>
+                <a href="#">企业文化</a>
+            </li>
+            <li>
+                <a href="#">招聘信息</a>
+            </li>
+            <li>
+                <a href="#">公司简介</a>
+            </li>
+            <li>
+                <a href="#">上海校区</a>
+            </li>
+            <li>
+                <a href="#">广州校区</a>
+            </li>
+        </ul>
+    </div>
+    <script> 
+
+        var lis = document.querySelectorAll('#cloud ul li')
+        var cloud = document.querySelector('#cloud')
+        var img = document.querySelector('#cloud_img')
+
+        for (var i = 0; i < lis.length; i++) {
+            var start = 1
+            //点击初始化起始位置
+            lis[i].onclick = function () {
+                start = this.offsetLeft
+                animation(img, start)
+            }
+            //云图移动到悬浮的li的位置
+            lis[i].onmouseover = function () {
+                animation(img, this.offsetLeft)
+            }
+            //鼠标离开导航框，云图运动到起始位置
+            cloud.onmouseout = function () {
+                animation(img, start)
+            }
+        }
+        //核心运动函数
+        function animation(obj, target) {
+            clearInterval(obj.timer)
+            obj.timer = setInterval(function () {
+                step = (target - obj.offsetLeft) / 10
+                step = step > 0 ? Math.ceil(step) : Math.floor(step);
+                obj.style.left = obj.offsetLeft + step + 'px'
+                if (obj.style.left == target) {
+                    clearInterval(obj.timer)
+                }
+            }, 30)
+        }
+        // console.log(lis[0].offsetLeft)值为1，不是0，所以如果不把img的left设为1px，鼠标悬浮第一个li时会有轻微晃动。star的值不设为1，也会晃动。
+
+    </script>
+</body>
+
+</html>
