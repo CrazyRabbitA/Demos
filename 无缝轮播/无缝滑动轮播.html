@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wraper {
+            width: 600px;
+            margin: 100px auto;
+        }
+
+        #slide {
+            list-style: none;
+            width: 2400px;
+            position: absolute;
+            left: -400px;
+        }
+
+        #slide li {
+            float: left;
+        }
+
+        #slide li img {
+            width: 400px;
+            height: 300px;
+        }
+
+        #show_frame {
+            border: 1px solid #000;
+            width: 400px;
+            height: 300px;
+            position: relative;
+            border-radius: 25px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        #pre {
+            position: absolute;
+            top: 100px;
+            left: 0;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #next {
+            position: absolute;
+            top: 100px;
+            right: 0;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #show_frame img {
+            width: 40px;
+        }
+
+        .wraper ol {
+            list-style: none;
+        }
+
+        .wraper ol li {
+            float: left;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #000;
+            text-align: center;
+            line-height: 20px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .active {
+            background: rgba(33, 33, 33, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wraper">
+        <div id="show_frame">
+            <span id="pre">
+                <img src="image/prev.png">
+            </span>
+            <span id="next">
+                <img src="image/next.png">
+            </span>
+            <ul id="slide">
+                <li>
+                    <img src="image/1.jpg">
+                </li>
+                <li>
+                    <img src="image/2.jpg">
+                </li>
+                <li>
+                    <img src="image/3.jpg">
+                </li>
+                <li>
+                    <img src="image/4.jpg">
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        //bug1：快速点击左右键时，页面会乱，未修复
+        //bug2： 没有实现按按钮时页面渐变，未修复
+        //bug3: 切换页面时，轮播会乱,下面代码可以修复这个bug
+        document.addEventListener('visibilitychange',function(){
+            if(document.hidden){
+                clearInterval(move_ul.timer2)
+            }
+            else{
+                move_ul.timer2 = setInterval(function () {
+                normal()
+            }, 1000)
+            }
+        })
+        var wraper = document.querySelector('.wraper')
+        var show = document.getElementById('show_frame')
+        var move_ul = document.querySelector('#slide')
+        var lis = document.querySelectorAll('#slide li')
+        var first = lis[0].cloneNode(true)
+        var last = lis[lis.length - 1].cloneNode(true)
+        var pre = document.querySelector('#pre')
+        var next = document.querySelector('#next')
+        var begin = -400
+        //复制第一张和最后一张
+        move_ul.appendChild(first)
+        move_ul.insertBefore(last, lis[0])
+        var new_lis = document.querySelectorAll('#slide li')
+        //创建按钮框
+        var creatOl = document.createElement('ol')
+        wraper.appendChild(creatOl)
+        for (var i = 0; i < lis.length; i++) {
+            var creatLi = document.createElement('li')
+            creatLi.textContent = i + 1;
+            creatOl.appendChild(creatLi)
+        }
+        var buttons = document.querySelectorAll('.wraper ol li')
+        //定义从用往左为正方向
+        function normal() {
+            var final = begin - 400
+            if (final == -2400) { final = -400 }
+            animate(move_ul, final)
+            begin = final
+        }
+        next.onclick = function () {
+            normal()
+        }
+        pre.onclick = function () {
+            var final = begin + 400
+            if (final == 800) { final = -1600 }
+            animate(move_ul, final)
+            begin = final
+        }
+        //页面加载完后自己动
+        window.addEventListener('load', function () {
+            add(0)
+            move_ul.timer2 = setInterval(function () {
+                normal()
+            }, 1000)
+        }, false)
+        //视口悬浮停止
+        wraper.onmouseover = function () {
+            clearInterval(move_ul.timer2)
+        }
+        //离开视口继续
+        wraper.onmouseleave = function () {
+            move_ul.timer2 = setInterval(function () {
+                normal()
+            }, 1000)
+        }
+        //激活去激活
+        function add(x) {
+            $(buttons[x]).addClass('active').siblings().removeClass('active')
+        }
+        //按钮跳转
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].onclick = function () {
+                var num = this.textContent
+                move_ul.style.left = -400 * num + 'px'
+                add(num - 1)
+            }
+        }
+        //核心动画函数
+        function animate(obj, target) {
+            clearInterval(obj.timer)
+            obj.timer = setInterval(function () {
+                var position = obj.offsetLeft
+                if (position == -2000) {
+                    obj.style.display = 'none';
+                    obj.offsetLeft//核心啊 为了不让浏览器把隐藏显示的过程合并 
+                    obj.style.left = -400 + 'px';
+                    obj.style.display = 'block';
+                    begin = -400
+                }
+                if (position == 0) {
+                    obj.style.display = 'none';
+                    obj.offsetLeft
+                    obj.style.left = -1600 + 'px';
+                    obj.style.display = 'block';
+                    begin = -1600
+                }
+                var step = (target - position) / 10
+                step = step > 0 ? Math.ceil(step) : Math.floor(step);//取整
+                obj.style.left = obj.offsetLeft + step + 'px'
+                if (position == target) {
+                    clearInterval(obj.timer)
+                }
+            }, 20)
+            //下面这一坨让对应的按钮高亮
+            var n = (begin / -400 - 1)
+            if (n == 3) {
+                add(0)
+            }
+            add(n + 1)
+        }
+ 
+     
+    </script>
+</body>
+
+</html>
