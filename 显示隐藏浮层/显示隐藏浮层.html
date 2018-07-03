@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>隐藏显示浮层</title>
+</head>
+<style>
+    body {
+        overflow: hidden;
+    }
+
+    .wraper {
+        width: 300px;
+        margin: 100px auto;
+    }
+
+    #poem {
+        font: 40px '微软雅黑';
+        display: none;
+        cursor: default;
+        border: 1px solid #000;
+    }
+
+    .active {
+        display: block !important;
+    }
+
+    #request {
+        position: absolute;
+        left: 30px;
+        top: 200px;
+    }
+
+    #button {
+        cursor: pointer;
+    }
+</style>
+
+<body>
+
+    <div class="wraper">
+        <button id="button">点击显示</button>
+        <span id="poem">
+            <p>
+                <pre>
+        江雪
+         <small><i>柳宗元</i></small>
+    千山鳥飛絕，
+    萬徑人蹤滅。
+    孤舟蓑笠翁，
+    獨釣寒山雪。
+    </pre>
+            </p>
+        </span>
+    </div>
+    <p id="request">要求：
+        <br> 点击按钮弹出浮层
+        <br> 点击别处关闭浮层
+        <br> 点击浮层时，浮层不得关闭
+        <br> 再次点击按钮，浮层消失
+        <br>
+    </p>
+</body>
+<script>
+    var button = document.querySelector('#button')
+    var span = document.querySelector('#poem')
+    var wrap = document.querySelector('.wraper')
+    var x = 0;
+    function show() {
+        span.classList.add('active')
+    }
+    function hide() {
+        span.classList.remove('active')
+    }
+    button.addEventListener('click', function (obj) {
+        if (x % 2 == 0) { show() }
+        else { hide() }
+        x++
+        if (x == 2) { x = 0 }
+        obj.stopPropagation()
+        //冒泡结束后，才会执行延时函数，这时候只给document添加一次事件监听，避免以后点击document时重复触发执行函数
+        setTimeout(function () {
+            $(document).one('click', function () {
+                hide()
+                x++
+            })
+        }, 0)
+
+    }, false)
+    //对显示内容事件监听
+    span.addEventListener('click', function (obj) {
+        show()
+        obj.stopPropagation()
+    }, false)
+
+</script>
+
+</html>
