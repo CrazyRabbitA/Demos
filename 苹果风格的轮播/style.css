@@ -1,0 +1,132 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+ul {
+    list-style: none;
+}
+#show ul li {
+    float: left;
+    width: 1349px;
+    height: 100%;
+}
+
+#show ul .first {
+    background: #000 url(image/iphone_large.jpg) no-repeat 50% 0%;
+}
+#show ul .second{
+    background: #000 url(image/watch_alt_large.jpg) no-repeat 50% 0%;
+    
+}
+#show ul .third {
+    background: #000 url(image/macbookpro_large.jpg) no-repeat 50% 0%;
+    
+}
+
+
+
+
+
+#show {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+#show ul  {
+    position: absolute;
+    width: 9000px;
+    height: 100%;
+    left: -1349px;
+
+}
+.left_section {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 15%;
+    height: 100%;
+    /* border: 1px solid red; */
+}
+.right_section {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 15%;
+    height: 100%;
+    /* border: 1px solid red; */
+}
+.outer_wraper {
+    position: relative;
+    width: 100%;
+    height: 800px;
+}
+
+.outer_wraper .left_section span,.outer_wraper .right_section span {
+    display: none;
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    margin-top: -32px;
+    border-radius: 100%;
+    background: rgba(180,180,180,0.25) url(image/arrows.png) no-repeat center 17px;
+    opacity: 0;
+    transition: opacity 2s ease;
+}
+ .left_section:hover span, .right_section:hover span{
+    display: block;
+    opacity: 0.6;
+ }
+/* .lr_show {
+    display: block !important;
+    opacity: 1 !important;
+} */
+.outer_wraper .right_section span {
+    background: rgba(180,180,180,0.25) url(image/arrows.png) no-repeat center -71px;
+    left: auto;
+    right: 20px;
+    
+}
+.button {
+    position: absolute;
+    width: 100%;
+    bottom: 50px;
+    /* border: 1px solid red; */
+    text-align: center;
+    
+}
+.outer_wraper .button ul li {
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+    margin: 0 3px;
+    cursor: pointer;
+    background: none;
+    opacity: 1;
+    /* border: 1px solid red; */
+}
+
+.button li span {
+    margin-top: 13px;
+    width: 50px;
+    height: 2px;
+    display: block;
+    background: rgba(128,128,128,0.2);
+}
+.button li span i {
+
+    
+    height: 2px;
+   width: 0;
+    background: rgb(51, 51, 51);
+    /* transform: scaleX(0);
+    transform-origin: 0; */
+    display: block;
+}
+.i_active {
+    width: 50px !important;
+    /* transition: width 2s linear; */
+
+}

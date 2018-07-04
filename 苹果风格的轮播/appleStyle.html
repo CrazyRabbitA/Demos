@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="outer_wraper">
+        <div id="show">
+            <ul>
+                <li class="first"></li>
+                <li class="second"></li>
+                <li class="third"></li>
+            </ul>
+        </div>
+        <div class="left_section">
+            <span></span>
+        </div>
+        <div class="right_section">
+            <span></span>
+        </div>
+        <div class="button">
+            <ul id="bar">
+                <li>
+                    <span>
+                        <i></i>
+                    </span>
+                </li>
+                <li>
+                    <span>
+                        <i></i>
+                    </span>
+                </li>
+                <li>
+                    <span>
+                        <i></i>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script>
+    //复制第一张，最后一张，插入新节点
+    var imgs = document.querySelectorAll('#show ul li')
+    var first = imgs[0].cloneNode(true)
+    var last = imgs[imgs.length - 1].cloneNode(true)
+    var ul = document.querySelector('#show ul')
+    ul.appendChild(first)
+    ul.insertBefore(last, imgs[0])
+    var new_img = document.querySelectorAll('#show ul li')
+    var buttons = document.querySelectorAll('.button ul li')   
+    var i_array = document.querySelectorAll('#bar li span i') 
+    //左右按钮
+    var pre = document.querySelector('.left_section span')
+    var next = document.querySelector('.right_section span')
+    var l_section = document.querySelector('.left_section')
+    var r_section = document.querySelector('.right_section')
+    var begin = -1349
+    //左右按钮绑定事件
+    next.onclick = function () {
+        clearInterval(ul.auto)
+        var t = begin - 1349
+        move(ul, t)
+    }
+    pre.onclick = function () {
+        clearInterval(ul.auto)
+        var t = begin + 1349
+        move(ul, t)
+    }
+    //刷新滚动页面
+    window.addEventListener('load', function () {
+        highLight()//不加这一句的话，页面刷新时第一个按钮不会高亮
+        ul.auto = setInterval(function () {
+            var t = begin - 1349
+            move(ul, t)
+        }, 2000)
+    }, false)
+    //核心运动函数
+    function move(obj, target) {
+        var ee = target
+        highLight(ee)//根据运动后的终点，选择高亮哪一个按钮
+        clearInterval(obj.timer)
+        obj.timer = setInterval(function () {
+            var start = obj.offsetLeft
+            var step = (target - start) / 10
+            step = step > 0 ? Math.ceil(step) : Math.floor(step);
+            obj.style.left = start + step + 'px'
+            if (obj.offsetLeft == target) {
+                clearInterval(obj.timer)
+                begin = obj.offsetLeft
+                replace(ul)//偷梁换柱
+            }
+        }, 20)
+    }
+    //循环函数
+    function replace(obj) {
+        if (begin == -5396) {
+            obj.style.display = 'none';
+            obj.offsetLeft//核心啊 为了不让浏览器把隐藏显示的过程合并 
+            obj.style.left = -1349 + 'px';
+            obj.style.display = 'block';
+            begin = -1349//重新设定初始位置，要不然它还是跳转之前的值
+        }
+        if (begin == 0) {
+            obj.style.display = 'none';
+            obj.offsetLeft
+            obj.style.left = -4047 + 'px';
+            obj.style.display = 'block';
+            begin = -4047
+        }
+    }
+    //点击按钮实现页面跳转函数
+    for (var i = 0; i < buttons.length; i++) {
+        buttons[i].index = i
+        buttons[i].onclick = function (x) {
+            clearInterval(ul.auto)
+            var n = this.index + 1
+            var final = n * -1349
+            move(ul, final)
+        }
+    }
+    //按钮随页面高亮
+    function highLight(target) {
+        var u = 0;
+        if (target == -2698) { u = 1 }
+        if (target == -4047) { u = 2 }
+        if (target == -1349) { u = 0 }
+        i_array[u].classList.add('i_active')//用jq的话会方便很多
+        for (var i = 0; i < i_array.length; i++) {
+            if (i != u) {
+                i_array[i].classList.remove('i_active')
+            }
+        }
+    }
+</script>
+
+</html>
