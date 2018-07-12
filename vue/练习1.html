@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://at.alicdn.com/t/font_693019_e1eqoyxa86i.js"></script>
+    <title>vue demo1</title>
+    <style>
+        .icon {
+            width: 30px;
+            height: 30px;
+            vertical-align: -0.15em;
+            fill: #B4B4B4;
+            overflow: hidden;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul,ol {
+            list-style: none;
+        }
+
+        .fl {
+            float: left;
+        }
+
+        #wraper {
+            width: 600px;
+            height: 200px;
+            border: 1px solid #000;
+            margin: 100px auto 0;
+            background: #EDF1F2;
+        }
+
+        #header {
+            width: 100%;
+            float: left;
+        }
+
+        .logo {
+            width: 30px;
+            height: 30px;
+            float: left;
+            cursor: pointer;
+        }
+
+        .num {
+            float: left;
+            height: 30px;
+            line-height: 30px;
+            width: 20px;
+            text-align: center;
+            cursor: default;
+        }
+
+        #showTime {
+            text-align: center;
+        }
+
+        .time {
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            font-size: 50px;
+            text-align: center;
+            line-height: 100px;
+            margin: 20px 20px;
+        }
+
+        .commitwraper {
+            width: 800px;
+            margin: 0 auto;
+            padding-left: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="wraper" v-bind:class=style>
+        <div id="header">
+            <ul class="fl">
+                <li :class=logo @mousedown=add @mouseup=remove v-html=svg1></li>
+                <span :class=num v-text=count></span>
+                <li :class=logo @click=show v-html=svg2></li>
+                <span :class=num></span>
+                <li :class=logo @click=turnRed v-html=svg3 @click='turnRed'></li>
+                <span :class=num v-text=heartNum></span>
+            </ul>
+        </div>
+        <div id="showTime">
+            <span class='time'>{{date|getHour}}</span>
+            <span class='time'>{{date|getMin }}</span>
+            <span class='time'>{{date|getSec }}</span>
+            <div id="timewraper">
+                <span class='datetime'>{{date|getYear}}</span>
+                <span class='datetime'>{{date|getMonth }}</span>
+                <span class='datetime'>{{date|getDay }}</span>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="commitwraper">
+        <div class="commitArea">
+            <div id="commit">
+                <textarea id="area" cols="70" rows="6"></textarea>
+            </div>
+            <button id="submit">提交留言
+            </button>
+        </div>
+        <ol id="allCommit"></ol>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="http://cdn.jsdelivr.net/npm/leancloud-storage@3.7.3/dist/av-min.js">
+    </script>
+    <!-- 初始化数据库，连库选库 -->
+    <script>
+        var APP_ID = '3wn8rNNr8NadkaH9lfFaR30Y-gzGzoHsz';
+        var APP_KEY = 'R7570R2gFmrcPBa0Oniycb80';
+        AV.init({
+            appId: APP_ID,
+            appKey: APP_KEY
+        });
+    </script>
+    <script>
+        var n = 0;
+        function plusZero(value) {
+            return value >= 10 ? value : '0' + value
+        }
+        var wraper = new Vue({
+            el: '#wraper',
+            data: {
+                style: 'wraper',
+                header: 'header',
+                logo: 'logo',
+                count: 0,
+                num: 'num',
+                heartNum: '',
+                date: new Date(),
+                svg1: '<svg class="icon" aria-hidden="true"><use xlink:href="#icon-eye"></use></svg>',
+                svg2: '<svg class="icon" aria-hidden="true"><use xlink:href="#icon-time"></use></svg>',
+                svg3: '<svg class="icon" aria-hidden="true"><use xlink:href="#icon-heart"></use></svg>',
+            },
+            methods: {
+                turnRed: function (x) {
+                    console.log(1)
+                    x.currentTarget.firstChild.style.fill = 'red'
+                    this.heartNum = '+1'
+                },
+                add: function (x) {
+                    x.currentTarget.firstChild.style.fill = 'green'
+                    this.count += 1
+                },
+                remove: function (x) {
+                },
+                show: function (x) {
+                    if (n == 2) { n = 0 }
+                    if (n % 2 == 0) {
+                        document.querySelector('#timewraper').style.visibility = 'hidden'
+                    }
+                    else {
+                        document.querySelector('#timewraper').style.visibility = 'visible'
+                    }
+                    n++
+                },
+            },
+            mounted: function () {
+                var vueobj = this
+                this.timer = setInterval(function () {
+                    vueobj.date = new Date()
+                }, 1000)
+            },
+            filters: {
+                getHour: function (value) {
+                    var date = new Date(value)
+                    var hour = plusZero(date.getHours())
+                    return hour + ':';
+                },
+                getMin: function (value) {
+                    var date = new Date(value)
+                    var min = plusZero(date.getMinutes())
+                    return min + ':';
+                },
+                getSec: function (value) {
+                    var date = new Date(value)
+                    var sec = plusZero(date.getSeconds())
+                    return sec;
+                },
+                getYear: function (value) {
+                    var date = new Date(value)
+                    var year = date.getFullYear()
+                    return year + '-';
+                },
+                getMonth: function (value) {
+                    var date = new Date(value)
+                    var month = plusZero(date.getMonth())
+                    return month + '-';
+                },
+                getDay: function (value) {
+                    var date = new Date(value)
+                    var day = plusZero(date.getDay())
+                    return day;
+                },
+            },
+        })
+    </script>
+    <script>
+        var submit = document.querySelector('#submit')
+        var chgs = document.querySelectorAll('.change')
+        var strong = document.querySelector('#strong')
+        var italic = document.querySelector('#italic')
+        var underline = document.querySelector('#underline')
+        var area = document.querySelector('#area')
+        var n = 0;
+        var ol = document.querySelector('#allCommit')
+        var query = new AV.Query('Commit')
+        query.find()
+            .then(function (messageSheet) {
+                var items = messageSheet.map(function (item) {
+                    return item.attributes.commitMessage
+                })
+                items.reverse().forEach(function (item) {
+                    var li = document.createElement('li')
+                    li.innerText = item
+                    ol.appendChild(li)
+                })
+            })
+        submit.addEventListener('click', function (e) {
+            var content = document.querySelector('#area').value
+            if (content == '') { alert('内容不能为空') }
+            else {
+                var TestObject = AV.Object.extend('Commit');
+                var testObject = new TestObject();
+                testObject.save({
+                    commitMessage: content
+                }).then(function (object) {
+                    var li = document.createElement('li')
+                    li.innerText = content
+                    var lis = ol.querySelectorAll('li')
+                    ol.insertBefore(li, lis[0])
+                    area.value = ""
+                }, function () {
+                    alert('提交数据库失败')
+                })
+            }
+        })
+    </script>
+</body>
+</html>
