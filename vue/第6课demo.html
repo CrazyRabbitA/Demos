@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="form">
+        <p>HTML中的输入框</p>
+        <input type="text" v-model:value=value1>{{value1}}
+        <br>
+        <p>HTML中的单选框</p>
+        <input type="radio" v-model='value6' value="点击会显示value内容">{{value6}}
+        <br>
+        <p>HTML多行单选框</p>
+        apple
+        <input type="radio" name="fruit" value="apple" v-model="value5">
+        <br> banana
+        <input type="radio" name="fruit" value="banana" v-model="value5">
+        <br> watermelon
+        <input type="radio" name="fruit" value="watermelon" v-model="value5">
+        <br> potato
+        <input type="radio" name="fruit" value="potato" v-model="value5">
+        <br> 你所选中的是：{{value5}}
+        <br>
+        <p>HTML多行复选框</p>
+        apple
+        <input type="checkbox" name="fruit" value="apple" v-model="value7">
+        <br> banana
+        <input type="checkbox" name="fruit" value="banana" v-model="value7">
+        <br> watermelon
+        <input type="checkbox" name="fruit" value="watermelon" v-model="value7">
+        <br> potato
+        <input type="checkbox" name="fruit" value="potato" v-model="value7">
+        <br> 你所选中的是：{{value7}}
+        <br>
+        <p>单选下拉菜单</p>
+        <select v-model='value10'>
+            <option value="apple"> apple</option>
+            <option value="banana">banana</option>
+            <option value="orange">orange</option>
+            <option value="potato">potato</option>
+        </select>
+        <br> 你选择的是：{{value10}}
+        <br>
+        <br>
+        <br>
+        <p>复选下拉菜单</p>
+        <select name="" id="" v-model='value11' multiple>
+            <option value="apple"> apple</option>
+            <option value="banana">banana</option>
+            <option value="orange">orange</option>
+            <option value="potato">potato</option>
+        </select>
+        <br>{{value11}}
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    var opp = new Vue({
+        el: '#form',
+        data: {
+            value1: '',
+            value2: 'textarea文本框也用v-model绑定value',
+            value3: false,
+            value4: true,
+            value5: '',
+            value6: '',
+            value7: [],
+            value8: '',
+            value9: '',
+            value10: '',
+            value11: [],
+        },
+        computed: {
+
+
+        },
+        methods: {
+
+        }
+    })
+</script>
+</body>
+
+</html>
