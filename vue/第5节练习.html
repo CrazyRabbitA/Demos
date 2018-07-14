@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+    
+    </style>
+</head>
+
+<body>
+    <div id="test">
+<p v-cloak>{{message1}}</p>
+<p v-once>{{message2}}</p>
+<p v-if>{{msg3}}</p>
+<p v-if='3>10'>{{msg5}}</p>
+<p v-else>{{msg4}}</p>
+<div v-if=show>用户名：<input type="text" placeholder="请输入用户名" key='userName'></div>
+<div v-else>密码：<input type="password" placeholder="请输入密码"key='passWord'></div>
+<button @click=shift>切换</button><br>
+<p v-show=show>{{msg6}}</p>
+    </div>
+   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        //模拟阻塞
+        // while(true){}
+        var opp = new Vue({
+            el: '#test',
+            data: {
+                message1: '会等到vue实例加载完成之后才回去渲染这个节点，避免了因初始化慢导致的页面闪动',
+                message2: 'v-once使得这个节点内容只会被渲染一次，后面无论如何改变节点内容，都不会重新渲染，在控制台改变opp.message2的值，页面内容是不会变得',
+                msg3:'v-if后面接等号，等号后面必须是布尔值,后面什么都不跟也可以正常显示',
+                msg4:'条件为false时显示这个',
+                msg5:'条件为true时才显示',
+                show: true,
+                msg6: 'v-show显示的内容,比较它们在dom树中的行为',     
+            },
+            computed: {
+                
+               
+            },
+            methods: {
+                shift: function(){
+                    this.show=!this.show
+                }
+               
+            }
+        })
+    </script>
+</body>
+
+</html>
