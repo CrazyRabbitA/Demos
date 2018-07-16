@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>综合练习</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="test">
+        <p>父组件给子组件传递信息的demo:</p>
+        输入的内容会在子组件中显示
+        <input type="text" v-model="text">
+        <br>
+        <a-component :value=text></a-component>
+        <p>总结：1.在子组件标签中用v-bind绑定一个属性，这个属性的值是父组件data中的数据，然后把这个属性放在子组件的props里，这样在子组件内部就可以使用父组件data中的值了
+            <br> 2.前面不变，如果data中的数据又可以通过v-model与表单绑定，那么就可以实现在父组件的表单中输入内容，然后实时传到子组件中
+        </p>
+        <p>子组件给父组件传递信息的demo:</p>
+        <b-component @change=complex></b-component>
+        <input type="text" :value="father" placeholder="我是父组件中的文本框">
+        <br>
+        <p>非父子组件间传递信息的demo:</p>
+        <c-component></c-component>
+        <d-component></d-component>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    Vue.component('a-component', {
+        template: '<div :style=sty>{{message1}}<br>{{value}}</div>',
+        props: ['value'],
+        data:
+            function () {
+                return {
+                    message1: '我是a子组件中的内容',
+                    sty: {
+                        width: '400px',
+                        height: '100px',
+                        borderColor: 'red',
+                        borderStyle: 'solid',
+                        borderWidth: '1px'
+                    },
+                }
+            },
+        methods: {
+        },
+    })
+    Vue.component('b-component', {
+        template: '<div>\
+        <input type="text" v-model=text @input=transport placeholder="我是b子组件中的文本框">\
+            </div>',
+        data:
+            function () {
+                return {
+                    message1: '我是b组件中内容',
+                    text: '',
+                }
+            },
+        methods: {
+            transport: function () {
+                this.$emit('change', this.text)
+                console.log(this.text)
+            }
+        },
+    })
+    Vue.component('c-component', {
+        template: '<div><input @input=fnc v-model=msg3 placeholder="我是c组件的文本框"></div>',
+        data:
+            function () {
+                return {
+                    message1: '我是c组件中内容',
+                    msg3: '',
+                }
+            },
+        methods: {
+            fnc: function () {
+                this.$root.bus.$emit('change', this.msg3)
+                console.log(this.msg3)
+            },
+        },
+    })
+    Vue.component('d-component', {
+        template: '<div><input placeholder="我是d组件的文本框"  :value=msg4> {{msg4}}</div>',
+        data:
+            function () {
+                return {
+                    message1: '我是d组件中内容',
+                    msg4: '',
+                }
+            },
+        methods: {
+        },
+        created: function () {
+            var that = this
+            this.$root.bus.$on('change', function (value) {
+                that.msg4 = value
+            })
+        },
+    })
+    var opp = new Vue({
+        el: '#test',
+        data: {
+            text: '',
+            father: '',
+            bus: new Vue(),
+        },
+        computed: {
+        },
+        methods: {
+            complex: function (value) {
+                this.father = value
+            },
+        }
+    })
+</script>
+</body>
+
+</html>

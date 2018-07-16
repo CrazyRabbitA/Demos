@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>子组件向父组件传递数据</title>
+    <style>
+    </style>
+</head>
+
+<body>
+    <div id="test">
+        <p>这是通过引入子组件的方式创建的</p>
+        现在的余额是：{{total}}   
+        <son-component @change=increase></son-component>
+        <p>这是直接在父组件中实现的</p>
+        现在的余额是：{{total2}}
+        <br>
+        <button @click=add2>+1000</button>
+        <button @click=reduce2>-1000</button>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    Vue.component('son-component', {
+        template: '<div>\
+        <button @click=addcount>+1000</button>\
+        <button @click=reducecount>-1000</button>\
+        </div>',
+        data:
+            function () {
+                return {
+                    count: 0,
+                }
+            },
+
+        methods: {
+            addcount: function () {
+                this.count += 1000
+                this.$emit('change', this.count)
+            },
+            reducecount: function () {
+                this.count -= 1000
+                this.$emit('change', this.count)
+            },
+        }
+    })
+
+    var opp = new Vue({
+        el: '#test',
+        data: {
+            total: 0,
+            total2: 0,
+        },
+        computed: {
+
+        },
+        methods: {
+            increase: function (value) {
+                this.total = value
+            },
+            add2: function () {
+                this.total2 += 1000
+            },
+            reduce2: function () {
+                this.total2 -= 1000
+            },
+        }
+    })
+</script>
+</body>
+
+</html>
